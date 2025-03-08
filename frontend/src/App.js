@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
+import AdminDashboard from "./pages/AdminDashboard";
+import StoreList from "./pages/StoreList";
 
-function App() {
+const App = () => {
+  const isAuthenticated = !!localStorage.getItem("token"); // Check if user is logged in
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {/* Login page as the default route */}
+        <Route path="/" element={<Login />} />
+
+        {/* Protected Routes (Require Login) */}
+        <Route 
+          path="/admin/dashboard" 
+          element={isAuthenticated ? <AdminDashboard /> : <Navigate to="/" />} 
+        />
+        <Route 
+          path="/admin/stores" 
+          element={isAuthenticated ? <StoreList /> : <Navigate to="/" />} 
+        />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;

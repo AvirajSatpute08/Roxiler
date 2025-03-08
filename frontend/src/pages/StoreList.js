@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const StoreList = () => {
   const [stores, setStores] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -13,6 +15,11 @@ const StoreList = () => {
       .catch((error) => console.error(error));
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   return (
     <div>
       <h1>Stores</h1>
@@ -21,6 +28,8 @@ const StoreList = () => {
           <li key={store.id}>{store.name} - {store.address} (Rating: {store.rating})</li>
         ))}
       </ul>
+      <button onClick={() => navigate("/admin/dashboard")}>Back to Dashboard</button>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   );
 };
